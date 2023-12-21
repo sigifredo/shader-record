@@ -134,7 +134,7 @@ void OFApp::setup()
 	}
     else
     {
-		_pShader->load("../data/shaders/shader");
+		_pShader->load("../../../data/shaders/shader");
 	}
     keyReleased('r');
 }
