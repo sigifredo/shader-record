@@ -8,36 +8,22 @@
 
 class OFApp : public ofBaseApp {
 public:
-    OFApp(const int& iWidth, const int& iHeight): _iWidth(iWidth), _iHeight(iHeight) { }
+    OFApp(const int& iWidth, const int& iHeight);
+    ~OFApp();
 
     void draw();
-    void setup();
-    void update();
     void exit();
-
-    /* Events */
-    void dragEvent(ofDragInfo dragInfo);
-    void gotMessage(ofMessage msg);
-    void keyPressed(int key);
-    void keyReleased(int key);
-    void mouseDragged(int x, int y, int button);
-    void mouseEntered(int x, int y);
-    void mouseExited(int x, int y);
-    void mouseMoved(int x, int y);
-    void mousePressed(int x, int y, int button);
-    void mouseReleased(int x, int y, int button);
-    void windowResized(int w, int h);
+    void keyReleased(const int& iKey);
+    void setup();
 
 private:
-    ofShader _shader;
-
-    // ofVideoGrabber vidGrabber;
-    ofxVideoRecorder _vidRecorder;
-    ofFbo _fbo;
-    bool _bRecording;
     bool _bDebug;
-    int _iWidth;
+    bool _bRecording;
     int _iHeight;
+    int _iWidth;
+    ofFbo * _pFbo;
+    ofShader * _pShader;
+    ofxVideoRecorder * _pVidRecorder;
 
     void recordingComplete(ofxVideoRecorderOutputFileCompleteEventArgs& args);
 };
