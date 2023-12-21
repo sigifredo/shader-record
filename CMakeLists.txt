@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-project(test001 VERSION 1.0.0 LANGUAGES CXX)
+project(record VERSION 1.0.0 LANGUAGES CXX)
 
-include("config/test001.cmake")
+include("config/record.cmake")
 include("config/deps.cmake")
 include("config/install.cmake")
 
@@ -16,9 +16,9 @@ src/OFApp.cpp
 src/ofxVideoRecorder.cpp
 )
 
-add_executable(test001 ${CLIENT_TEST_SRCS} src/main.cpp)
+add_executable(record ${CLIENT_TEST_SRCS} src/main.cpp)
 
-message(${OF_LIBRARIES})
+# message(${OF_LIBRARIES})
 
-target_link_libraries(test001 PUBLIC ${GST_LIBRARIES} ${OF_LIBRARIES})
-# target_link_libraries(test001 PUBLIC ${OF_LIBRARIES})
+target_link_libraries(record PUBLIC ${GST_LIBRARIES} ${OF_LIBRARIES})
+# target_link_libraries(record PUBLIC ${OF_LIBRARIES})

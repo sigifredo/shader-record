@@ -6,58 +6,59 @@
 
 void OFApp::draw()
 {
-    double u_time = ofGetElapsedTimef() * 0.5;
-    if (u_time > 80.0) {
+    double dTime = ofGetElapsedTimef() * 0.5;
+    if (dTime > 80.0) {
         keyReleased('c');
         ofExit();
     }
-    fbo.begin();
+    _fbo.begin();
 
 	_shader.begin();
     {
         _shader.setUniform2f("u_resolution", _iWidth, _iHeight);
-        _shader.setUniform1f("u_time", u_time);
+        _shader.setUniform1f("u_time", dTime);
 	    ofDrawRectangle(0, 0, _iWidth, _iHeight);
     }
 	_shader.end();
 
     ofSetColor(255, 255, 255);
 
-    if (bDebug)
+    if (_bDebug)
     {
-        stringstream ss;
-        ss << "video queue size: " << vidRecorder.getVideoQueueSize() << endl
-        << "u_time: " << u_time << endl
-        << "FPS: " << ofGetFrameRate() << endl
-        << (bRecording?"pause":"start") << " recording: r" << endl
-        << (bRecording?"close current video file: c":"") << endl;
+        std::stringstream ss;
+        ss << "video queue size: " << _vidRecorder.getVideoQueueSize() << std::endl
+        << "u_time: " << dTime << std::endl
+        << "FPS: " << ofGetFrameRate() << std::endl
+        << (_bRecording?"pause":"start") << " recording: r" << std::endl
+        << (_bRecording?"close current video file: c":"") << std::endl;
 
         ofSetColor(0,0,0,100);
         ofDrawRectangle(0, 0, 260, 75);
         ofSetColor(255, 255, 255);
         ofDrawBitmapString(ss.str(),15,15);
 
-        if (bRecording)
+        if (_bRecording)
         {
             ofSetColor(255, 0, 0);
             ofDrawCircle(_iWidth - 20, 20, 5);
         }
     }
 
-    fbo.end();
+    _fbo.end();
 
-    if (bRecording){
+    if (_bRecording)
+    {
         ofPixels pixels;
-        fbo.readToPixels(pixels);
-        vidRecorder.addFrame(pixels);
+        _fbo.readToPixels(pixels);
+        _vidRecorder.addFrame(pixels);
     }
 
-    fbo.draw(0, 0);
+    _fbo.draw(0, 0);
 }
 
 void OFApp::setup()
 {
-    bDebug = false;
+    _bDebug = false;
     // int sampleRate = 44100;
     // int channels = 2;
 
@@ -69,19 +70,19 @@ void OFApp::setup()
     // override the default codecs if you like
     // run 'ffmpeg -codecs' to find out what your implementation supports (or -formats on some older versions)
     // vidRecorder.setVideoCodec("mpeg4");
-    vidRecorder.setVideoCodec("prores");
-    vidRecorder.setVideoBitrate("2000k");
+    _vidRecorder.setVideoCodec("prores");
+    _vidRecorder.setVideoBitrate("2000k");
     // vidRecorder.setVideoBitrate("800k");
     // vidRecorder.setPixelFormat("rgb24");
     // vidRecorder.setAudioCodec("mp3");
     // vidRecorder.setAudioBitrate("192k");
-    vidRecorder.setup("output.mov", _iWidth, _iHeight, 30);
+    _vidRecorder.setup("output.mov", _iWidth, _iHeight, 30);
     // vidRecorder.setup("output.mov", ofGetWidth(), ofGetHeight(), 30);
-    fbo.allocate(_iWidth, _iHeight, GL_RGB);
+    _fbo.allocate(_iWidth, _iHeight, GL_RGB);
 
-    ofAddListener(vidRecorder.outputFileCompleteEvent, this, &OFApp::recordingComplete);
+    ofAddListener(_vidRecorder.outputFileCompleteEvent, this, &OFApp::recordingComplete);
 
-    bRecording = false;
+    _bRecording = false;
 
 	if (ofIsGLProgrammableRenderer())
     {
@@ -98,8 +99,9 @@ void OFApp::update()
 {
 }
 
-void OFApp::recordingComplete(ofxVideoRecorderOutputFileCompleteEventArgs& args){
-    cout << "The recoded video file is now complete." << endl;
+void OFApp::recordingComplete(ofxVideoRecorderOutputFileCompleteEventArgs& args)
+{
+    std::cout << "The recoded video file is now complete." << std::endl;
 }
 
 void OFApp::dragEvent(ofDragInfo dragInfo)
@@ -118,19 +120,20 @@ void OFApp::keyReleased(int key)
 {
     if (key == 'r')
     {
-        bRecording = !bRecording;
+        _bRecording = !_bRecording;
 
-        if (bRecording && !vidRecorder.isRecording())
+        if (_bRecording && !_vidRecorder.isRecording())
         {
-            vidRecorder.start();
+            _vidRecorder.start();
             std::cout << "===> Inicia la grabación" << std::endl;
         }
     }
     if (key == 'c')
     {
-        if (bRecording) {
-            bRecording = false;
-            vidRecorder.close();
+        if (_bRecording)
+        {
+            _bRecording = false;
+            _vidRecorder.close();
         }
     }
 }
@@ -165,6 +168,6 @@ void OFApp::windowResized(int w, int h)
 
 void OFApp::exit()
 {
-    ofRemoveListener(vidRecorder.outputFileCompleteEvent, this, &OFApp::recordingComplete);
-    vidRecorder.close();
+    ofRemoveListener(_vidRecorder.outputFileCompleteEvent, this, &OFApp::recordingComplete);
+    _vidRecorder.close();
 }

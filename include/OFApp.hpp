@@ -32,10 +32,10 @@ private:
     ofShader _shader;
 
     // ofVideoGrabber vidGrabber;
-    ofxVideoRecorder vidRecorder;
-    ofFbo fbo;
-    bool bRecording;
-    bool bDebug;
+    ofxVideoRecorder _vidRecorder;
+    ofFbo _fbo;
+    bool _bRecording;
+    bool _bDebug;
     int _iWidth;
     int _iHeight;
 
