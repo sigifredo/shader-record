@@ -3,6 +3,8 @@
 // Own
 #include <OFApp.hpp>
 
+#define print(X)            std::cout << X << std::endl
+
 OFApp::OFApp(const int& iWidth, const int& iHeight)
 {
     _iHeight = iHeight;
@@ -78,7 +80,7 @@ void OFApp::exit()
     _pVidRecorder->close();
 }
 
-void OFApp::keyReleased(const int& iKey)
+void OFApp::keyReleased(int iKey)
 {
     if (iKey == 'r')
     {

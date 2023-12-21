@@ -13,7 +13,7 @@ public:
 
     void draw();
     void exit();
-    void keyReleased(const int& iKey);
+    void keyReleased(int iKey);
     void setup();
 
 private:
